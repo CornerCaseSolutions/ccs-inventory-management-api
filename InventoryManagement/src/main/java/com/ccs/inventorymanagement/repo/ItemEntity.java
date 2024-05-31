@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -23,10 +23,10 @@ public class ItemEntity {
     private UUID id;
 
     @Column
-    private LocalDate created;
+    private Instant created;
 
     @Column
-    private LocalDate updated;
+    private Instant updated;
 
     @Column
     private int stock;

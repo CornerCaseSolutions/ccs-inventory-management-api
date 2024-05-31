@@ -3,14 +3,14 @@ package com.ccs.inventorymanagement.domain;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.UUID;
 @Data
 @Builder
 public class Item implements Trackable {
     private final UUID id;
-    private final LocalDate created;
-    private final LocalDate updated;
+    private final Instant created;
+    private final Instant updated;
     private final int stock;
     private final String description;
     private final Condition condition;

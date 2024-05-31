@@ -1,10 +1,10 @@
 package com.ccs.inventorymanagement.domain;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.UUID;
 
 public interface Trackable {
     UUID getId();
-    LocalDate created = LocalDate.now();
-    LocalDate updated = null;
+    Instant created = Instant.now();
+    Instant updated = null;
 }
