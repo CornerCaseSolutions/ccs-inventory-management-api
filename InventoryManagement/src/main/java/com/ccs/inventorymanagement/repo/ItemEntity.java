@@ -32,6 +32,9 @@ public class ItemEntity {
     private int stock;
 
     @Column
+    private String brand;
+
+    @Column
     private String description;
 
     @Column

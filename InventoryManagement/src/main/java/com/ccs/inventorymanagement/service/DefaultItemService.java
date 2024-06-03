@@ -39,9 +39,4 @@ public class DefaultItemService<E extends ItemEntity, T extends Item> implements
     public Mono<Void> delete(UUID id) {
         return null;
     }
-
-    @Override
-    public Mono<Void> softDelete(UUID id) {
-        return null;
-    }
 }
