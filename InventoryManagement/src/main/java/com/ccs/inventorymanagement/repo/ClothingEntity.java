@@ -23,10 +23,16 @@ public class ClothingEntity extends ItemEntity {
     private String brand;
 
     @Column
-    private String type;
+    private String color;
 
     @Column
     private Clothing.Apparel_type apparelType;
+
+    @Column
+    private Clothing.Gender gender;
+
+    @Column
+    private Clothing.Size size;
 
     public static ClothingEntity from(Clothing clothing) {
         return builder()
@@ -35,11 +41,13 @@ public class ClothingEntity extends ItemEntity {
                 .updated(clothing.getUpdated())
                 .name(clothing.getName())
                 .condition(clothing.getCondition())
-                .status(clothing.getStatus())
+                .present(clothing.isPresent())
                 .description(clothing.getDescription())
                 .brand(clothing.getBrand())
+                .color(clothing.getColor())
                 .apparelType(clothing.getApparelType())
-                .type(clothing.getType()) //TODO: LOOK INTO THIS
+                .gender(clothing.getGender())
+                .size(clothing.getSize())
                 .build();
     }
 

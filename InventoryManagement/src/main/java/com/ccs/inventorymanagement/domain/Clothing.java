@@ -6,7 +6,7 @@ import lombok.experimental.SuperBuilder;
 
 @Data
 @SuperBuilder(toBuilder = true)
-public class Clothing extends Item{
+public class Clothing extends Item {
     public enum Apparel_type {
         OUTERWEAR,
         SHIRT,
@@ -21,11 +21,28 @@ public class Clothing extends Item{
         JEWELERY,
         SHOES,
         MISCELLANEOUS
-
     }
+
+    public enum Gender {
+        MALE,
+        FEMALE,
+        UNISEX
+    }
+
+    public enum Size {
+        EXTRA_SMALL,
+        SMALL,
+        MEDIUM,
+        LARGE,
+        EXTRA_LARGE
+    }
+
+
     private String brand;
-    private String type; //TODO: debate this with jake to use enum or string
+    private String color;
     private Apparel_type apparelType;
+    private Gender gender;
+    private Size size;
 
     public static Clothing from(ClothingEntity clothingEntity) {
         return Clothing.builder()
@@ -34,11 +51,13 @@ public class Clothing extends Item{
                 .updated(clothingEntity.getUpdated())
                 .name(clothingEntity.getName())
                 .condition(clothingEntity.getCondition())
-                .status(clothingEntity.getStatus())
                 .description(clothingEntity.getDescription())
+                .present(clothingEntity.isPresent())
                 .brand(clothingEntity.getBrand())
+                .color(clothingEntity.getColor())
                 .apparelType(clothingEntity.getApparelType())
-                .type(clothingEntity.getType()) //TODO: LOOK INTO THIS
+                .gender(clothingEntity.getGender())
+                .size(clothingEntity.getSize())
                 .build();
     }
 

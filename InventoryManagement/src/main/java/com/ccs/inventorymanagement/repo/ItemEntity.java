@@ -19,16 +19,13 @@ import java.util.UUID;
 @Setter
 public class ItemEntity {
     @Id
-    private UUID id; //why not final here? is it due to db specific stuff?
+    private UUID id;
 
     @Column
     private String name;
 
     @Column
     private Item.Condition condition;
-
-    @Column
-    private Item.Status status;
 
     @Column
     private Instant created;
@@ -39,8 +36,7 @@ public class ItemEntity {
     @Column
     private String description;
 
-
-
-
+    @Column
+    private boolean present;
 
 }
