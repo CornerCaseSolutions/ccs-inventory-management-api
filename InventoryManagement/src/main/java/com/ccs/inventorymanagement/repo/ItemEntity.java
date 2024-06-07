@@ -18,9 +18,14 @@ import java.util.UUID;
 @Getter
 @Setter
 public class ItemEntity {
-
     @Id
     private UUID id;
+
+    @Column
+    private String name;
+
+    @Column
+    private Item.Condition condition;
 
     @Column
     private Instant created;
@@ -29,17 +34,9 @@ public class ItemEntity {
     private Instant updated;
 
     @Column
-    private int stock;
-
-    @Column
-    private String brand;
-
-    @Column
     private String description;
 
     @Column
-    private Item.Condition condition;
+    private boolean present;
 
-    @Column
-    private Item.StockStatus stockStatus;
 }
