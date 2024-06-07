@@ -10,7 +10,7 @@ import java.util.UUID;
 public class Item implements Trackable {
     private final UUID id;
     private final Instant created;
-    private final Instant updated;
+    private Instant updated;
     private final int stock;
     private final String brand;
     private final String description;
