@@ -19,7 +19,7 @@ import java.util.UUID;
 
 public class FindClothingByIdHandler implements HandlerFunction<ServerResponse> {
 
-    private ClothingService clothingService;
+    private final ClothingService clothingService;
 
     public FindClothingByIdHandler(ClothingService clothingService) {
         this.clothingService = clothingService;
@@ -59,7 +59,7 @@ public class FindClothingByIdHandler implements HandlerFunction<ServerResponse> 
         private String description;
         private String brand;
         private String color;
-        private Clothing.Apparel_type apparelType;
+        private Clothing.Type apparelType;
         private Clothing.Gender gender;
         private Clothing.Size size;
 
@@ -71,10 +71,10 @@ public class FindClothingByIdHandler implements HandlerFunction<ServerResponse> 
                     .name(clothing.getName())
                     .condition(clothing.getCondition())
                     .description(clothing.getDescription())
-                    .present(clothing.isPresent())
+                    .present(clothing.getPresent())
                     .brand(clothing.getBrand())
                     .color(clothing.getColor())
-                    .apparelType(clothing.getApparelType())
+                    .apparelType(clothing.getType())
                     .gender(clothing.getGender())
                     .size(clothing.getSize())
                     .build();
