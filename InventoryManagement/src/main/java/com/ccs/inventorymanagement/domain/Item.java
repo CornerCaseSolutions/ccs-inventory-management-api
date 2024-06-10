@@ -22,7 +22,5 @@ public class Item implements Trackable {
     private String name;
     private Condition condition;
     private Boolean present;
-    private final Instant created;//this should not change
-    private Instant updated;
     private String description;
 }
