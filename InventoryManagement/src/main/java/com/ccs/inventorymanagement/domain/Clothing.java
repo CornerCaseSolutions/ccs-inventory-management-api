@@ -47,8 +47,6 @@ public class Clothing extends Item {
     public static Clothing from(ClothingEntity clothingEntity) {
         return Clothing.builder()
                 .id(clothingEntity.getId())
-                .created(clothingEntity.getCreated())
-                .updated(clothingEntity.getUpdated())
                 .name(clothingEntity.getName())
                 .condition(clothingEntity.getCondition())
                 .description(clothingEntity.getDescription())

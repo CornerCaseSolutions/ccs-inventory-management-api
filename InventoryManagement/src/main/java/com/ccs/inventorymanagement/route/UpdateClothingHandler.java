@@ -5,12 +5,14 @@ import com.ccs.inventorymanagement.domain.Item;
 import com.ccs.inventorymanagement.service.ClothingService;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.HandlerFunction;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
+import java.util.function.Function;
 
 public class UpdateClothingHandler implements HandlerFunction<ServerResponse> {
 
@@ -22,7 +24,36 @@ public class UpdateClothingHandler implements HandlerFunction<ServerResponse> {
 
     @Override
     public Mono<ServerResponse> handle(ServerRequest serverRequest) {
-        return null;
+        return serverRequest.bodyToMono(Request.class)
+                .flatMap(new Function<Request, Mono<? extends Clothing>>() {
+                    @Override
+                    public Mono<? extends Clothing> apply(Request request) {
+                        if(request.getUpdateType() == Request.UpdateType.UPDATE) {
+                            return service.update(Clothing.builder()
+                                    .id(request.getId())
+                                    .name(request.getName())
+                                    .description(request.getDescription())
+                                    .condition(request.getCondition())
+                                    .present(request.getPresent())
+                                    .brand(request.getBrand())
+                                    .color(request.getColor())
+                                    .type(request.getType())
+                                    .gender(request.getGender())
+                                    .size(request.getSize())
+                                    .build());
+                        } else if(request.getUpdateType() == Request.UpdateType.DELETE) {
+                            return null;
+                        } else {
+                            return null;
+                        }
+                    }
+                }).flatMap(new Function<Clothing, Mono<? extends ServerResponse>>() {
+                    @Override
+                    public Mono<? extends ServerResponse> apply(Clothing clothing) {
+                        return ServerResponse.ok()
+                                .body(BodyInserters.fromValue(Response.from(clothing)));
+                    }
+                });
     }
 
     @Data
@@ -32,30 +63,47 @@ public class UpdateClothingHandler implements HandlerFunction<ServerResponse> {
         private String name;
         private String description;
         private Item.Condition condition;
-        private boolean present;
+        private Boolean present;
         private String brand;
         private String color;
-        private Clothing.Apparel_type apparelType;
+        private Clothing.Type type;
         private Clothing.Gender gender;
         private Clothing.Size size;
-        private Update_type updateType;
+        private UpdateType updateType;
 
-        public enum Update_type {
+        public enum UpdateType {
             UPDATE,
             DELETE
         }
     }
 
+    @Data
+    @Builder
     public static final class Response {
         private UUID id;
         private String name;
         private String description;
         private Item.Condition condition;
-        private boolean present;
+        private Boolean present;
         private String brand;
         private String color;
-        private Clothing.Apparel_type apparelType;
+        private Clothing.Type type;
         private Clothing.Gender gender;
         private Clothing.Size size;
+
+        public static Response from(Clothing clothing) {
+            return builder()
+                    .id(clothing.getId())
+                    .name(clothing.getName())
+                    .description(clothing.getDescription())
+                    .condition(clothing.getCondition())
+                    .present(clothing.getPresent())
+                    .brand(clothing.getBrand())
+                    .color(clothing.getColor())
+                    .type(clothing.getType())
+                    .gender(clothing.getGender())
+                    .size(clothing.getSize())
+                    .build();
+        }
     }
 }
