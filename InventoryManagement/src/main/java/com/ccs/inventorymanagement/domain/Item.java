@@ -21,7 +21,7 @@ public class Item implements Trackable {
     private final UUID id;
     private String name;
     private Condition condition;
-    private boolean present;
+    private Boolean present;
     private final Instant created;//this should not change
     private Instant updated;
     private String description;
