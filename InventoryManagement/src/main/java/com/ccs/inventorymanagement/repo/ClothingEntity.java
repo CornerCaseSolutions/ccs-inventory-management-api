@@ -26,7 +26,7 @@ public class ClothingEntity extends ItemEntity {
     private String color;
 
     @Column
-    private Clothing.Apparel_type apparelType;
+    private Clothing.Type type;
 
     @Column
     private Clothing.Gender gender;
@@ -41,11 +41,11 @@ public class ClothingEntity extends ItemEntity {
                 .updated(clothing.getUpdated())
                 .name(clothing.getName())
                 .condition(clothing.getCondition())
-                .present(clothing.isPresent())
+                .present(clothing.getPresent())
                 .description(clothing.getDescription())
                 .brand(clothing.getBrand())
                 .color(clothing.getColor())
-                .apparelType(clothing.getApparelType())
+                .type(clothing.getType())
                 .gender(clothing.getGender())
                 .size(clothing.getSize())
                 .build();
