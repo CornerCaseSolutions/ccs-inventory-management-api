@@ -31,6 +31,6 @@ public class ClothingService implements ItemService<Clothing> {
     }
 
     public Mono<Void> delete(UUID id) {
-        return null;
+        return repository.deleteById(id).then();
     }
 }

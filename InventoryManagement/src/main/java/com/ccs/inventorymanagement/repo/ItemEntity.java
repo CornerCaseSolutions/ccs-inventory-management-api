@@ -37,6 +37,6 @@ public class ItemEntity {
     private String description;
 
     @Column
-    private boolean present;
+    private Boolean present;
 
 }
