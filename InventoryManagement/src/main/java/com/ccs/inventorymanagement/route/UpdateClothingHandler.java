@@ -28,24 +28,25 @@ public class UpdateClothingHandler implements HandlerFunction<ServerResponse> {
                 .flatMap(new Function<Request, Mono<? extends Clothing>>() {
                     @Override
                     public Mono<? extends Clothing> apply(Request request) {
+                        Boolean present = null;
                         if(request.getUpdateType() == Request.UpdateType.UPDATE) {
-                            return service.update(Clothing.builder()
-                                    .id(request.getId())
-                                    .name(request.getName())
-                                    .description(request.getDescription())
-                                    .condition(request.getCondition())
-                                    .present(request.getPresent())
-                                    .brand(request.getBrand())
-                                    .color(request.getColor())
-                                    .type(request.getType())
-                                    .gender(request.getGender())
-                                    .size(request.getSize())
-                                    .build());
+                            present = true;
                         } else if(request.getUpdateType() == Request.UpdateType.DELETE) {
-                            return null;
-                        } else {
-                            return null;
+                            present = false;
                         }
+
+                        return service.update(Clothing.builder()
+                                .id(UUID.fromString(serverRequest.pathVariable(ID_VARIABLE)))   //ID_VARIABLE will need to change to reference the route config class at some point.
+                                .name(request.getName())
+                                .description(request.getDescription())
+                                .condition(request.getCondition())
+                                .present(present)
+                                .brand(request.getBrand())
+                                .color(request.getColor())
+                                .type(request.getType())
+                                .gender(request.getGender())
+                                .size(request.getSize())
+                                .build());
                     }
                 }).flatMap(new Function<Clothing, Mono<? extends ServerResponse>>() {
                     @Override
@@ -63,7 +64,6 @@ public class UpdateClothingHandler implements HandlerFunction<ServerResponse> {
         private String name;
         private String description;
         private Item.Condition condition;
-        private Boolean present;
         private String brand;
         private String color;
         private Clothing.Type type;
