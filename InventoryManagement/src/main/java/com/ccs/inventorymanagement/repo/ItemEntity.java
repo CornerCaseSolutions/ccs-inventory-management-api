@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @Getter
 @Setter
 public class ItemEntity {
