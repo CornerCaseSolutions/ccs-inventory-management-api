@@ -66,8 +66,6 @@ public class FindClothingByIdHandler implements HandlerFunction<ServerResponse> 
         public static Response from(Clothing clothing) {
             return Response.builder()
                     .id(clothing.getId())
-                    .created(clothing.getCreated())
-                    .updated(clothing.getUpdated())
                     .name(clothing.getName())
                     .condition(clothing.getCondition())
                     .description(clothing.getDescription())
