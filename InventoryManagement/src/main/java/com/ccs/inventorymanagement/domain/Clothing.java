@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
 @Data
-@SuperBuilder(toBuilder = true)
+@SuperBuilder
 public class Clothing extends Item {
     public enum Type {
         OUTERWEAR,

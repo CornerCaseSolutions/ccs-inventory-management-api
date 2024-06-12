@@ -1,5 +1,6 @@
 package com.ccs.inventorymanagement.route;
 
+import com.ccs.inventorymanagement.config.RouteConfig;
 import com.ccs.inventorymanagement.domain.Clothing;
 import com.ccs.inventorymanagement.domain.Item;
 import com.ccs.inventorymanagement.service.ClothingService;
@@ -36,7 +37,7 @@ public class UpdateClothingHandler implements HandlerFunction<ServerResponse> {
                         }
 
                         return service.update(Clothing.builder()
-                                .id(UUID.fromString(serverRequest.pathVariable(ID_VARIABLE)))   //ID_VARIABLE will need to change to reference the route config class at some point.
+                                .id(UUID.fromString(serverRequest.pathVariable(RouteConfig.ID_VARIABLE)))
                                 .name(request.getName())
                                 .description(request.getDescription())
                                 .condition(request.getCondition())
