@@ -2,9 +2,11 @@ package com.ccs.inventorymanagement.route;
 
 import com.ccs.inventorymanagement.config.RouteConfig;
 import com.ccs.inventorymanagement.domain.Clothing;
+import com.ccs.inventorymanagement.domain.Item;
 import com.ccs.inventorymanagement.service.ClothingService;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.HandlerFunction;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -23,26 +25,30 @@ public class DeleteClothingHandler implements HandlerFunction<ServerResponse> {
 
     @Override
     public Mono<ServerResponse> handle(ServerRequest serverRequest) {
-        final Request request = Request.from(serverRequest);
-        return service.findById(request.getId())
-                .flatMap(new Function<Clothing, Mono<? extends ServerResponse>>() {
+        return serverRequest.bodyToMono(UpdateClothingHandler.Request.class)
+                .flatMap(new Function<UpdateClothingHandler.Request, Mono<? extends Clothing>>() {
+                    @Override
+                    public Mono<? extends Clothing> apply(UpdateClothingHandler.Request request) {
+                        return service.update(Clothing.builder()
+                                .id(UUID.fromString(serverRequest.pathVariable(RouteConfig.ID_VARIABLE)))
+                                .name(request.getName())
+                                .description(request.getDescription())
+                                .condition(request.getCondition())
+                                .status(Item.Status.ISSUED)
+                                .brand(request.getBrand())
+                                .color(request.getColor())
+                                .type(request.getType())
+                                .gender(request.getGender())
+                                .size(request.getSize())
+                                .build());
+                    }
+                }).flatMap(new Function<Clothing, Mono<? extends ServerResponse>>() {
                     @Override
                     public Mono<? extends ServerResponse> apply(Clothing clothing) {
                         return ServerResponse.ok()
-                                .build();
+                                .body(BodyInserters.fromValue(UpdateClothingHandler.Response.from(clothing)));
                     }
-                });
-    }
-
-    @Data
-    @Builder
-    public static final class Request {
-        private UUID id;
-
-        public static Request from(ServerRequest serverRequest) {
-            return builder()
-                    .id(UUID.fromString(serverRequest.pathVariable(RouteConfig.ID_VARIABLE)))
-                    .build();
-        }
+                })
+                .onErrorResume(ex -> ServerResponse.badRequest().build());
     }
 }

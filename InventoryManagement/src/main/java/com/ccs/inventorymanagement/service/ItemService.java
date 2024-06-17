@@ -15,6 +15,6 @@ public interface ItemService<T extends Item> {
 
     Mono<T> update(T item);
 
-    Mono<Void> delete(UUID id);
+    Mono<T> delete(T item);
 
 }

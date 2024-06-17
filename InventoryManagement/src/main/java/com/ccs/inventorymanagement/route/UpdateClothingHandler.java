@@ -29,19 +29,12 @@ public class UpdateClothingHandler implements HandlerFunction<ServerResponse> {
                 .flatMap(new Function<Request, Mono<? extends Clothing>>() {
                     @Override
                     public Mono<? extends Clothing> apply(Request request) {
-                        Boolean present = null;
-                        if(request.getUpdateType() == Request.UpdateType.UPDATE) {
-                            present = true;
-                        } else if(request.getUpdateType() == Request.UpdateType.DELETE) {
-                            present = false;
-                        }
-
                         return service.update(Clothing.builder()
                                 .id(UUID.fromString(serverRequest.pathVariable(RouteConfig.ID_VARIABLE)))
                                 .name(request.getName())
                                 .description(request.getDescription())
                                 .condition(request.getCondition())
-                                .present(present)
+                                .status(Item.Status.PRESENT)
                                 .brand(request.getBrand())
                                 .color(request.getColor())
                                 .type(request.getType())
@@ -55,7 +48,8 @@ public class UpdateClothingHandler implements HandlerFunction<ServerResponse> {
                         return ServerResponse.ok()
                                 .body(BodyInserters.fromValue(Response.from(clothing)));
                     }
-                });
+                })
+                .onErrorResume(ex -> ServerResponse.badRequest().build());
     }
 
     @Data
@@ -70,12 +64,6 @@ public class UpdateClothingHandler implements HandlerFunction<ServerResponse> {
         private Clothing.Type type;
         private Clothing.Gender gender;
         private Clothing.Size size;
-        private UpdateType updateType;
-
-        public enum UpdateType {
-            UPDATE,
-            DELETE
-        }
     }
 
     @Data
@@ -85,7 +73,7 @@ public class UpdateClothingHandler implements HandlerFunction<ServerResponse> {
         private String name;
         private String description;
         private Item.Condition condition;
-        private Boolean present;
+        private Item.Status status;
         private String brand;
         private String color;
         private Clothing.Type type;
@@ -98,7 +86,7 @@ public class UpdateClothingHandler implements HandlerFunction<ServerResponse> {
                     .name(clothing.getName())
                     .description(clothing.getDescription())
                     .condition(clothing.getCondition())
-                    .present(clothing.getPresent())
+                    .status(clothing.getStatus())
                     .brand(clothing.getBrand())
                     .color(clothing.getColor())
                     .type(clothing.getType())

@@ -50,7 +50,7 @@ public class Clothing extends Item {
                 .name(clothingEntity.getName())
                 .condition(clothingEntity.getCondition())
                 .description(clothingEntity.getDescription())
-                .present(clothingEntity.getPresent())
+                .status(clothingEntity.getStatus())
                 .brand(clothingEntity.getBrand())
                 .color(clothingEntity.getColor())
                 .type(clothingEntity.getType())

@@ -20,7 +20,7 @@ public class FindAllClothingHandler implements HandlerFunction<ServerResponse> {
 
     @Override
     public Mono<ServerResponse> handle(ServerRequest serverRequest) {
-        return serverRequest.bodyToMono(Req);
+        return null;
     }
 
     @Data
