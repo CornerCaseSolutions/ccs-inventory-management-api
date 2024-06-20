@@ -44,7 +44,11 @@ public class ClothingService implements ItemService<Clothing> {
     }
 
     @Override
-    public Mono<Clothing> delete(UUID id) {
-        return null;
+    public Mono<Clothing> delete(Clothing item) {
+        return clothingRepository.save(ClothingEntity.from(item)
+                        .toBuilder()
+                        .updated(Instant.now())
+                        .build())
+                .map(Clothing::from);
     }
 }
