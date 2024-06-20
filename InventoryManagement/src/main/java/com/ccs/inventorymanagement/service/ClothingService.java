@@ -9,6 +9,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.Instant;
 import java.util.UUID;
+import java.util.function.Function;
 
 public class ClothingService implements ItemService<Clothing> {
 
@@ -44,11 +45,7 @@ public class ClothingService implements ItemService<Clothing> {
     }
 
     @Override
-    public Mono<Clothing> delete(Clothing item) {
-        return clothingRepository.save(ClothingEntity.from(item)
-                        .toBuilder()
-                        .updated(Instant.now())
-                        .build())
-                .map(Clothing::from);
+    public Mono<Void> delete(UUID id) {
+        return clothingRepository.findById(id).then();
     }
 }
