@@ -10,5 +10,5 @@ import java.util.UUID;
 @Repository
 public interface ClothingRepository extends R2dbcRepository<ClothingEntity, UUID> {
     @Query("UPDATE clothing SET status = 'ISSUED' WHERE id = $0")
-    Mono<Void> deleteByID(UUID id);
+    Mono<Void> softDeleteById(UUID id);
 }

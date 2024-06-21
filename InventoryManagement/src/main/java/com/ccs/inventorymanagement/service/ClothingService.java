@@ -46,6 +46,6 @@ public class ClothingService implements ItemService<Clothing> {
 
     @Override
     public Mono<Void> delete(UUID id) {
-        return clothingRepository.deleteByID(id).then();
+        return clothingRepository.softDeleteById(id).then();
     }
 }

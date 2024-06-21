@@ -27,7 +27,7 @@ public class DeleteClothingHandler implements HandlerFunction<ServerResponse> {
     @Override
     public Mono<ServerResponse> handle(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(UpdateClothingHandler.Request.class)
-                .flatMap((Function<UpdateClothingHandler.Request, Mono<? extends Clothing>>) request -> service.update(Clothing.builder()
+                .flatMap(request -> service.update(Clothing.builder()
                         .id(UUID.fromString(serverRequest.pathVariable(RouteConfig.ID_VARIABLE)))
                         .name(request.getName())
                         .description(request.getDescription())
@@ -38,7 +38,7 @@ public class DeleteClothingHandler implements HandlerFunction<ServerResponse> {
                         .type(request.getType())
                         .gender(request.getGender())
                         .size(request.getSize())
-                        .build())).flatMap((Function<Clothing, Mono<? extends ServerResponse>>) clothing -> ServerResponse.ok()
+                        .build())).flatMap(clothing -> ServerResponse.ok()
                                 .body(BodyInserters.fromValue(UpdateClothingHandler.Response.from(clothing))))
                 .onErrorResume(ex -> ServerResponse.status(HttpStatusCode.valueOf(500)).build());
     }
