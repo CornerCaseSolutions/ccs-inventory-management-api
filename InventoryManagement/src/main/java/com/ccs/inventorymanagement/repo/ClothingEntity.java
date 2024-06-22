@@ -39,7 +39,7 @@ public class ClothingEntity extends ItemEntity {
                 .id(clothing.getId())
                 .name(clothing.getName())
                 .condition(clothing.getCondition())
-                .present(clothing.getPresent())
+                .status(clothing.getStatus())
                 .description(clothing.getDescription())
                 .brand(clothing.getBrand())
                 .color(clothing.getColor())
