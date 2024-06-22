@@ -46,6 +46,9 @@ public class ClothingService implements ItemService<Clothing> {
 
     @Override
     public Mono<Void> delete(UUID id) {
-        return clothingRepository.softDeleteById(id).then();
+        return clothingRepository.findById(id).map(entity -> entity.toBuilder()
+                        .status(Item.Status.ISSUED)
+                        .build())
+                .flatMap(issuedEntity -> clothingRepository.save(issuedEntity)).then();
     }
 }
