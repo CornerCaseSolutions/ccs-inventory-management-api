@@ -6,6 +6,7 @@ import com.ccs.inventorymanagement.domain.Item;
 import com.ccs.inventorymanagement.service.ClothingService;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.HandlerFunction;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -26,30 +27,21 @@ public class UpdateClothingHandler implements HandlerFunction<ServerResponse> {
     @Override
     public Mono<ServerResponse> handle(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(Request.class)
-                .flatMap(new Function<Request, Mono<? extends Clothing>>() {
-                    @Override
-                    public Mono<? extends Clothing> apply(Request request) {
-                        return service.update(Clothing.builder()
-                                .id(UUID.fromString(serverRequest.pathVariable(RouteConfig.ID_VARIABLE)))
-                                .name(request.getName())
-                                .description(request.getDescription())
-                                .condition(request.getCondition())
-                                .status(Item.Status.PRESENT)
-                                .brand(request.getBrand())
-                                .color(request.getColor())
-                                .type(request.getType())
-                                .gender(request.getGender())
-                                .size(request.getSize())
-                                .build());
-                    }
-                }).flatMap(new Function<Clothing, Mono<? extends ServerResponse>>() {
-                    @Override
-                    public Mono<? extends ServerResponse> apply(Clothing clothing) {
-                        return ServerResponse.ok()
-                                .body(BodyInserters.fromValue(Response.from(clothing)));
-                    }
-                })
-                .onErrorResume(ex -> ServerResponse.badRequest().build());
+                .flatMap(request -> service.update(Clothing.builder()
+                        .id(UUID.fromString(serverRequest.pathVariable(RouteConfig.ID_VARIABLE)))
+                        .name(request.getName())
+                        .description(request.getDescription())
+                        .condition(request.getCondition())
+                        .status(Item.Status.PRESENT)
+                        .brand(request.getBrand())
+                        .color(request.getColor())
+                        .type(request.getType())
+                        .gender(request.getGender())
+                        .size(request.getSize())
+                        .build())).flatMap(clothing -> ServerResponse.ok()
+                        .body(BodyInserters.fromValue(Response.from(clothing))))
+                .onErrorResume(ex -> ServerResponse.status(HttpStatusCode.valueOf(500)).build())
+                .switchIfEmpty(ex -> ServerResponse.status(HttpStatusCode.valueOf(404)).build());
     }
 
     @Data
