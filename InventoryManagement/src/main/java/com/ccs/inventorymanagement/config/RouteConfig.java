@@ -39,11 +39,11 @@ public class RouteConfig {
 
     @Bean
     public RouterFunction<ServerResponse> findClothingByIdRoute() {
-        return route(GET(FIND_CLOTHING_BY_ID_PATH), fetchAllClothingHandler());
+        return route(GET(FIND_CLOTHING_BY_ID_PATH), findClothingByIdHandler());
     }
 
     @Bean
-    public HandlerFunction<ServerResponse> fetchAllClothingHandler() {
+    public HandlerFunction<ServerResponse> findClothingByIdHandler() {
         return new FindClothingByIdHandler(clothingService);
     }
 
