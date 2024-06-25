@@ -8,6 +8,7 @@ import com.ccs.inventorymanagement.domain.Item;
 
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.HandlerFunction;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -31,6 +32,8 @@ public class FindClothingByIdHandler implements HandlerFunction<ServerResponse> 
         return clothingService.findById(request.id)
                 .flatMap(clothing -> ServerResponse.ok()
                         .body(BodyInserters.fromValue(Response.from(clothing))))
+                .onErrorResume(ex -> ServerResponse.status(HttpStatusCode.valueOf(500))
+                        .build())
                 .switchIfEmpty(ServerResponse.notFound()
                         .build());
     }
@@ -56,6 +59,7 @@ public class FindClothingByIdHandler implements HandlerFunction<ServerResponse> 
         private boolean present;
         private final Instant created;//this should not change
         private Instant updated;
+        private Item.Status status;
         private String description;
         private String brand;
         private String color;
@@ -68,8 +72,8 @@ public class FindClothingByIdHandler implements HandlerFunction<ServerResponse> 
                     .id(clothing.getId())
                     .name(clothing.getName())
                     .condition(clothing.getCondition())
+                    .status(clothing.getStatus())
                     .description(clothing.getDescription())
-                    .present(clothing.getPresent())
                     .brand(clothing.getBrand())
                     .color(clothing.getColor())
                     .apparelType(clothing.getType())
