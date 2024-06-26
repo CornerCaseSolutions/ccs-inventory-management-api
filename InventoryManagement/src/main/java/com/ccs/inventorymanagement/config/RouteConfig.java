@@ -59,7 +59,7 @@ public class RouteConfig {
 
     @Bean
     public RouterFunction<ServerResponse> updateClothingRoute() {
-        return route(PUT(CLOTHING_PATH), updateClothingHandler());
+        return route(PUT(FIND_CLOTHING_BY_ID_PATH), updateClothingHandler());
     }
 
     @Bean
@@ -69,7 +69,7 @@ public class RouteConfig {
 
     @Bean
     public RouterFunction<ServerResponse> deleteClothingRoute() {
-        return route(DELETE(CLOTHING_PATH), deleteClothingHandler());
+        return route(DELETE(FIND_CLOTHING_BY_ID_PATH), deleteClothingHandler());
     }
 
     @Bean
