@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        node {
+            label 'workingDirectory'
+            customWorkspace './InventoryManagement'
+        }
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -9,7 +14,7 @@ pipeline {
         }
         stage("Build project") {
             steps {
-                sh "gradlew build -p ./InventoryManagement"
+                sh "gradlew build"
             }
         }
     }
