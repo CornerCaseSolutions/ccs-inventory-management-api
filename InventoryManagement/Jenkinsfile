@@ -9,8 +9,7 @@ pipeline {
         }
         stage("Build project") {
             steps {
-                sh 'gradle init'
-                sh "gradle wrapper build"
+                sh "gradlew build -p ./InventoryManagement"
             }
         }
     }
