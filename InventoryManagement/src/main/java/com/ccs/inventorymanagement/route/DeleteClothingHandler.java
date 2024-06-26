@@ -6,7 +6,7 @@ import com.ccs.inventorymanagement.domain.Item;
 import com.ccs.inventorymanagement.service.ClothingService;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.HandlerFunction;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -40,6 +40,6 @@ public class DeleteClothingHandler implements HandlerFunction<ServerResponse> {
                         .size(request.getSize())
                         .build())).flatMap(clothing -> ServerResponse.ok()
                                 .body(BodyInserters.fromValue(UpdateClothingHandler.Response.from(clothing))))
-                .onErrorResume(ex -> ServerResponse.status(HttpStatusCode.valueOf(500)).build());
+                .onErrorResume(ex -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
 }

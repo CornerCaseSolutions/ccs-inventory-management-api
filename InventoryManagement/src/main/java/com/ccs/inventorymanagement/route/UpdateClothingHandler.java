@@ -6,7 +6,7 @@ import com.ccs.inventorymanagement.domain.Item;
 import com.ccs.inventorymanagement.service.ClothingService;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.HandlerFunction;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -40,8 +40,8 @@ public class UpdateClothingHandler implements HandlerFunction<ServerResponse> {
                         .size(request.getSize())
                         .build())).flatMap(clothing -> ServerResponse.ok()
                         .body(BodyInserters.fromValue(Response.from(clothing))))
-                .onErrorResume(ex -> ServerResponse.status(HttpStatusCode.valueOf(500)).build())
-                .switchIfEmpty(ex -> ServerResponse.status(HttpStatusCode.valueOf(404)).build());
+                .onErrorResume(ex -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).build())
+                .switchIfEmpty(ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
 
     @Data
