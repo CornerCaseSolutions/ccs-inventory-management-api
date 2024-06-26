@@ -41,7 +41,11 @@ public class ClothingService implements ItemService<Clothing> {
 
     @Override
     public Mono<Clothing> update(Clothing item) {
-        return null;
+        return clothingRepository.save(ClothingEntity.from(item)
+                        .toBuilder()
+                        .updated(Instant.now())
+                        .build())
+                .map(Clothing::from);
     }
 
     @Override
