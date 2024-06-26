@@ -1,11 +1,8 @@
 package com.ccs.inventorymanagement.route;
 
-
-import com.ccs.inventorymanagement.config.RouteConfig;
 import com.ccs.inventorymanagement.domain.Clothing;
-import com.ccs.inventorymanagement.service.ClothingService;
 import com.ccs.inventorymanagement.domain.Item;
-
+import com.ccs.inventorymanagement.service.ClothingService;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpStatusCode;
@@ -16,50 +13,53 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-public class FindClothingByIdHandler implements HandlerFunction<ServerResponse> {
+public class FindAllHandler implements HandlerFunction<ServerResponse> {
 
     private final ClothingService clothingService;
-
-    public FindClothingByIdHandler(ClothingService clothingService) {
+    public FindAllHandler(ClothingService clothingService) {
         this.clothingService = clothingService;
     }
-
     @Override
-    public Mono<ServerResponse> handle(ServerRequest serverRequest) {
-        final Request request = Request.from(serverRequest);
-        return clothingService.findById(request.id)
-                .flatMap(clothing -> ServerResponse.ok()
-                        .body(BodyInserters.fromValue(Response.from(clothing))))
+    public Mono<ServerResponse> handle(ServerRequest request) {
+        return clothingService.findAll()
+                .collectList()
+                .flatMap(clothingList -> ServerResponse.ok()
+                        .body(BodyInserters.fromValue(Response.from(clothingList))))
                 .onErrorResume(ex -> ServerResponse.status(HttpStatusCode.valueOf(500))
                         .build())
                 .switchIfEmpty(ServerResponse.notFound()
                         .build());
     }
 
-
     @Data
     @Builder
-    public static final class Request {
-        private UUID id;
-        public static Request from(ServerRequest request) {
+    public static final class Response {
+        private final List<Entry> entryList;
+        public static Response from(Collection<Clothing> clothing) {
             return builder()
-                    .id(UUID.fromString(request.pathVariable(RouteConfig.ID_VARIABLE)))
+                    .entryList(clothing.stream()
+                            .map(Entry::from)
+                            .collect(Collectors.toList()))
                     .build();
         }
+
     }
 
     @Data
     @Builder
-    public static final class Response {
+    public static final class Entry {
         private final UUID id;
         private String name;
         private final Item.Condition condition;
         private boolean present;
         private final Instant created;//this should not change
-        private Instant updated;
         private Item.Status status;
+        private Instant updated;
         private String description;
         private String brand;
         private String color;
@@ -67,13 +67,13 @@ public class FindClothingByIdHandler implements HandlerFunction<ServerResponse> 
         private Clothing.Gender gender;
         private Clothing.Size size;
 
-        public static Response from(Clothing clothing) {
-            return Response.builder()
+        public static Entry from(Clothing clothing) {
+            return Entry.builder()
                     .id(clothing.getId())
                     .name(clothing.getName())
                     .condition(clothing.getCondition())
-                    .status(clothing.getStatus())
                     .description(clothing.getDescription())
+                    .status(clothing.getStatus())
                     .brand(clothing.getBrand())
                     .color(clothing.getColor())
                     .apparelType(clothing.getType())
