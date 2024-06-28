@@ -32,7 +32,7 @@ public class UpdateClothingHandler implements HandlerFunction<ServerResponse> {
                         .name(request.getName())
                         .description(request.getDescription())
                         .condition(request.getCondition())
-                        .status(Item.Status.PRESENT)
+                        .status(request.getStatus())
                         .brand(request.getBrand())
                         .color(request.getColor())
                         .type(request.getType())
@@ -41,7 +41,7 @@ public class UpdateClothingHandler implements HandlerFunction<ServerResponse> {
                         .build())).flatMap(clothing -> ServerResponse.ok()
                         .body(BodyInserters.fromValue(Response.from(clothing))))
                 .onErrorResume(ex -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).build())
-                .switchIfEmpty(ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
+                .switchIfEmpty(ServerResponse.status(HttpStatus.NOT_FOUND).build());
     }
 
     @Data
@@ -51,6 +51,7 @@ public class UpdateClothingHandler implements HandlerFunction<ServerResponse> {
         private String name;
         private String description;
         private Item.Condition condition;
+        private Item.Status status;
         private String brand;
         private String color;
         private Clothing.Type type;
