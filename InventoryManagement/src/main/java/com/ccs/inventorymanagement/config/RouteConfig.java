@@ -19,7 +19,7 @@ public class RouteConfig {
 
     public static final String CLOTHING_PATH = "/clothing";
     public static final String ID_VARIABLE = "id";
-    public static final String FIND_CLOTHING_BY_ID_PATH = CLOTHING_PATH + "/{" + ID_VARIABLE + "}";
+    public static final String CLOTHING_BY_ID_PATH = CLOTHING_PATH + "/{" + ID_VARIABLE + "}";
     private final ClothingService clothingService;
 
     @Autowired
@@ -39,7 +39,7 @@ public class RouteConfig {
 
     @Bean
     public RouterFunction<ServerResponse> findClothingByIdRoute() {
-        return route(GET(FIND_CLOTHING_BY_ID_PATH), findClothingByIdHandler());
+        return route(GET(CLOTHING_BY_ID_PATH), findClothingByIdHandler());
     }
 
     @Bean
@@ -59,7 +59,7 @@ public class RouteConfig {
 
     @Bean
     public RouterFunction<ServerResponse> updateClothingRoute() {
-        return route(PUT(FIND_CLOTHING_BY_ID_PATH), updateClothingHandler());
+        return route(PUT(CLOTHING_BY_ID_PATH), updateClothingHandler());
     }
 
     @Bean
@@ -69,7 +69,7 @@ public class RouteConfig {
 
     @Bean
     public RouterFunction<ServerResponse> deleteClothingRoute() {
-        return route(DELETE(FIND_CLOTHING_BY_ID_PATH), deleteClothingHandler());
+        return route(DELETE(CLOTHING_BY_ID_PATH), deleteClothingHandler());
     }
 
     @Bean
