@@ -59,7 +59,7 @@ public class RouteConfig {
 
     @Bean
     public RouterFunction<ServerResponse> updateClothingRoute() {
-        return route(PUT(CLOTHING_BY_ID_PATH), updateClothingHandler());
+        return route(PUT(CLOTHING_PATH), updateClothingHandler());
     }
 
     @Bean
