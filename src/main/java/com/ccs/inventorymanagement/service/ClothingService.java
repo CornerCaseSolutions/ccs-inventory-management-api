@@ -17,6 +17,7 @@ public class ClothingService implements ItemService<Clothing> {
     public ClothingService(ClothingRepository clothingRepository) {
         this.clothingRepository = clothingRepository;
     }
+
     @Override
     public Flux<Clothing> findAll() {
         return clothingRepository.findAll()

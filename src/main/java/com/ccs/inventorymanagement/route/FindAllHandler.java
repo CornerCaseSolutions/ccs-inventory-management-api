@@ -21,9 +21,11 @@ import java.util.stream.Collectors;
 public class FindAllHandler implements HandlerFunction<ServerResponse> {
 
     private final ClothingService clothingService;
+
     public FindAllHandler(ClothingService clothingService) {
         this.clothingService = clothingService;
     }
+
     @Override
     public Mono<ServerResponse> handle(ServerRequest request) {
         return clothingService.findAll()
