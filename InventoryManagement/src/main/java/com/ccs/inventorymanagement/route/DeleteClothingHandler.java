@@ -26,20 +26,21 @@ public class DeleteClothingHandler implements HandlerFunction<ServerResponse> {
 
     @Override
     public Mono<ServerResponse> handle(ServerRequest serverRequest) {
-        return serverRequest.bodyToMono(UpdateClothingHandler.Request.class)
-                .flatMap(request -> service.update(Clothing.builder()
-                        .id(UUID.fromString(serverRequest.pathVariable(RouteConfig.ID_VARIABLE)))
-                        .name(request.getName())
-                        .description(request.getDescription())
-                        .condition(request.getCondition())
-                        .status(Item.Status.ISSUED)
-                        .brand(request.getBrand())
-                        .color(request.getColor())
-                        .type(request.getType())
-                        .gender(request.getGender())
-                        .size(request.getSize())
-                        .build())).flatMap(clothing -> ServerResponse.ok()
-                                .body(BodyInserters.fromValue(UpdateClothingHandler.Response.from(clothing))))
+        return service.delete(Request.from(serverRequest).getId())
+                .flatMap(clothing -> ServerResponse.noContent()
+                        .build())
                 .onErrorResume(ex -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
+    }
+
+    @Data
+    @Builder
+    public static final class Request {
+        private UUID id;
+
+        public static Request from(ServerRequest request) {
+            return builder()
+                    .id(UUID.fromString(request.pathVariable(RouteConfig.ID_VARIABLE)))
+                    .build();
+        }
     }
 }
