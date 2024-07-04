@@ -9,7 +9,7 @@ pipeline {
         }
         stage("Build project") {
             steps {
-                sh "cd ./InventoryManagement && gradlew build"
+                sh "./gradlew build"
             }
         }
     }
