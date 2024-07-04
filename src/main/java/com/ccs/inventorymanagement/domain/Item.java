@@ -18,9 +18,15 @@ public class Item implements Trackable {
         DESTROYED,
     }
 
+    public enum Status {
+        PRESENT,
+        ISSUED,
+        DELETED
+    }
+
     private final UUID id;
     private String name;
     private Condition condition;
-    private Boolean present;
+    private Status status;
     private String description;
 }
