@@ -1,5 +1,9 @@
 package com.ccs.inventorymanagement.config;
 
+import com.ccs.inventorymanagement.route.DeleteClothingHandler;
+import com.ccs.inventorymanagement.route.FindAllClothingHandler;
+import com.ccs.inventorymanagement.route.FindClothingByIdHandler;
+import com.ccs.inventorymanagement.route.UpdateClothingHandler;
 import com.ccs.inventorymanagement.service.ClothingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

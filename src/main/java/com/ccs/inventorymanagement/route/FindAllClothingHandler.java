@@ -18,10 +18,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class FindAllHandler implements HandlerFunction<ServerResponse> {
+public class FindAllClothingHandler implements HandlerFunction<ServerResponse> {
 
     private final ClothingService clothingService;
-    public FindAllHandler(ClothingService clothingService) {
+    public FindAllClothingHandler(ClothingService clothingService) {
         this.clothingService = clothingService;
     }
     @Override
