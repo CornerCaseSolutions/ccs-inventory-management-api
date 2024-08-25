@@ -20,7 +20,8 @@ public class Item implements Trackable {
 
     public enum Status {
         PRESENT,
-        ISSUED
+        ISSUED,
+        DELETED
     }
 
     private final UUID id;
