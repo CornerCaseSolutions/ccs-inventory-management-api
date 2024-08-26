@@ -7,13 +7,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.HandlerFunction;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import java.time.Instant;
+//import java.time.Instant;
 import java.util.UUID;
 
 public class CreateClothingHandler implements HandlerFunction<ServerResponse> {
@@ -38,7 +39,8 @@ public class CreateClothingHandler implements HandlerFunction<ServerResponse> {
                         .size(request.getSize())
                         .build()))
                 .flatMap(clothing -> ServerResponse.ok()
-                        .body(BodyInserters.fromValue(Response.from(clothing))));
+                        .body(BodyInserters.fromValue(Response.from(clothing))))
+                .onErrorResume(ex -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
 
     @Data
@@ -47,9 +49,6 @@ public class CreateClothingHandler implements HandlerFunction<ServerResponse> {
     public static final class Request {
         private String name;
         private final Item.Condition condition;
-        private boolean present;
-        private final Instant created;//this should not change
-        private Instant updated;
         private Item.Status status;
         private String description;
         private String brand;
@@ -65,14 +64,13 @@ public class CreateClothingHandler implements HandlerFunction<ServerResponse> {
         private UUID id;
         private String name;
         private final Item.Condition condition;
-        private boolean present;
-        private final Instant created;//this should not change
-        private Instant updated;
+        //We can't get created without doing clothingRepository.findById(id).created() AFAIK so removing it for now; we can come back and implement this later if wanted
+        //private final Instant created;
         private Item.Status status;
         private String description;
         private String brand;
         private String color;
-        private Clothing.Type apparelType;
+        private Clothing.Type type;
         private Clothing.Gender gender;
         private Clothing.Size size;
 
@@ -85,7 +83,7 @@ public class CreateClothingHandler implements HandlerFunction<ServerResponse> {
                     .description(clothing.getDescription())
                     .brand(clothing.getBrand())
                     .color(clothing.getColor())
-                    .apparelType(clothing.getType())
+                    .type(clothing.getType())
                     .gender(clothing.getGender())
                     .size(clothing.getSize())
                     .build();
