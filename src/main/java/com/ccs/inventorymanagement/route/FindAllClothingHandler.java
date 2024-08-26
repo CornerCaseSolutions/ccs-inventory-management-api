@@ -21,12 +21,8 @@ import java.util.stream.Collectors;
 public class FindAllClothingHandler implements HandlerFunction<ServerResponse> {
 
     private final ClothingService clothingService;
-<<<<<<<< HEAD:src/main/java/com/ccs/inventorymanagement/route/FindAllHandler.java
 
-    public FindAllHandler(ClothingService clothingService) {
-========
     public FindAllClothingHandler(ClothingService clothingService) {
->>>>>>>> main:src/main/java/com/ccs/inventorymanagement/route/FindAllClothingHandler.java
         this.clothingService = clothingService;
     }
 

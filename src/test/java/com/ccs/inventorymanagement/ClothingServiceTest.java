@@ -1,5 +1,6 @@
 package com.ccs.inventorymanagement;
 
+import com.ccs.inventorymanagement.domain.Clothing;
 import com.ccs.inventorymanagement.repo.ClothingEntity;
 import com.ccs.inventorymanagement.repo.ClothingRepository;
 import com.ccs.inventorymanagement.service.ClothingService;
@@ -14,6 +15,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,7 +31,7 @@ public class ClothingServiceTest {
     ClothingService clothingService;
 
     @Test
-    @DisplayName("Should return all clothing found in the database")
+    @DisplayName("GET Find All: Should return all clothing found in the database")
     public void shouldReturnAllClothing() {
 
         // Given
@@ -53,7 +55,7 @@ public class ClothingServiceTest {
     }
 
     @Test
-    @DisplayName("Should return clothing by ID")
+    @DisplayName("GET Find By ID: Should return clothing by ID")
     public void shouldReturnClothingById() {
 
         // Given
@@ -75,7 +77,7 @@ public class ClothingServiceTest {
     }
 
     @Test
-    @DisplayName("Should not return clothing by ID if does not exist")
+    @DisplayName("GET Find By ID: Should not return clothing by ID if does not exist")
     public void shouldNotReturnClothingIfNotFoundById() {
 
         // Given
@@ -93,7 +95,7 @@ public class ClothingServiceTest {
     }
 
     @Test
-    @DisplayName("Should return errors")
+    @DisplayName("GET Find By ID: Should return errors")
     public void shouldReturnErrors() {
 
         // Given
@@ -110,4 +112,26 @@ public class ClothingServiceTest {
         verify(clothingRepository, times(1)).findById(id);
     }
 
+    @Test
+    @DisplayName("PUT Update Clothing: Should update clothing by ID")
+    public void shouldUpdateClothing() {
+        //Given
+        final UUID id = UUID.randomUUID();
+        Clothing clothing = mock(Clothing.class);
+        ClothingEntity entity = mock(ClothingEntity.class);
+
+        //When
+        when(clothingRepository.findById(id))
+                .thenReturn(Mono.just(entity));
+        when(clothing.getId())
+                .thenReturn(id);
+        when(entity.toBuilder())
+                .thenReturn(entity.toBuilder().build());
+
+        //Then
+        clothingService.update(clothing)
+                .as(StepVerifier::create)
+                .verifyComplete();
+        verify(clothingRepository, times(1)).save(entity);
+    }
 }
