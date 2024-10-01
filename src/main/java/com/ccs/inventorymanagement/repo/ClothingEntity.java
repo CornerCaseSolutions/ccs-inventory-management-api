@@ -18,6 +18,7 @@ import java.util.UUID;
 @SuperBuilder(toBuilder = true)
 @Getter
 @Setter
+@Table("clothing")
 public class ClothingEntity extends ItemEntity {
 
     @Column
