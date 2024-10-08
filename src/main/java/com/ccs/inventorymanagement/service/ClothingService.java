@@ -42,6 +42,15 @@ public class ClothingService implements ItemService<Clothing> {
     public Mono<Clothing> update(Clothing item) {
         return clothingRepository.findById(item.getId())
         .map(entity -> entity.toBuilder()
+                .name(item.getName())
+                .description(item.getDescription())
+                .condition(item.getCondition())
+                .status(item.getStatus())
+                .brand(item.getBrand())
+                .color(item.getColor())
+                .type(item.getType())
+                .gender(item.getGender())
+                .size(item.getSize())
                 .updated(Instant.now())
                 .build())
                 .flatMap(updatedEntity -> clothingRepository.save(updatedEntity)).map(Clothing::from);

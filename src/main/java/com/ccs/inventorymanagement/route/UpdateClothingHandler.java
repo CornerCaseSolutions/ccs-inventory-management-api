@@ -28,7 +28,7 @@ public class UpdateClothingHandler implements HandlerFunction<ServerResponse> {
     public Mono<ServerResponse> handle(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(Request.class)
                 .flatMap(request -> service.update(Clothing.builder()
-                        .id(request.getId())
+                        .id(UUID.fromString(serverRequest.pathVariable(RouteConfig.ID_VARIABLE)))
                         .name(request.getName())
                         .description(request.getDescription())
                         .condition(request.getCondition())
