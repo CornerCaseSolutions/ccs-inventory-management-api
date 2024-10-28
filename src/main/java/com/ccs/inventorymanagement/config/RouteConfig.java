@@ -1,5 +1,6 @@
 package com.ccs.inventorymanagement.config;
 
+import com.ccs.inventorymanagement.route.*;
 import com.ccs.inventorymanagement.service.ClothingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -64,8 +65,28 @@ public class RouteConfig {
 //        return route(DELETE(CLOTHING_BY_ID_PATH), deleteClothingHandler());
 //    }
 
-//    @Bean
-//    public HandlerFunction<ServerResponse> deleteClothingHandler() {
-//        return new DeleteClothingHandler(clothingService);
-//    }
+    @Bean
+    public HandlerFunction<ServerResponse> createClothingHandler() {
+        return new CreateClothingHandler(clothingService);
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> updateClothingRoute() {
+        return route(PUT(CLOTHING_BY_ID_PATH), updateClothingHandler());
+    }
+
+    @Bean
+    public HandlerFunction<ServerResponse> updateClothingHandler() {
+        return new UpdateClothingHandler(clothingService);
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> deleteClothingRoute() {
+        return route(DELETE(CLOTHING_BY_ID_PATH), deleteClothingHandler());
+    }
+
+    @Bean
+    public HandlerFunction<ServerResponse> deleteClothingHandler() {
+        return new DeleteClothingHandler(clothingService);
+    }
 }

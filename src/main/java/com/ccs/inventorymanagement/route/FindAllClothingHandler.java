@@ -81,6 +81,8 @@ public class FindAllClothingHandler implements HandlerFunction<ServerResponse> {
                     .apparelType(clothing.getType())
                     .gender(clothing.getGender())
                     .size(clothing.getSize())
+                    .created(clothing.getCreated())
+                    .updated(clothing.getUpdated())
                     .build();
         }
     }

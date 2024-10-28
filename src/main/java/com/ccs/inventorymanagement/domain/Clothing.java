@@ -58,6 +58,8 @@ public class Clothing extends Item {
                 .type(clothingEntity.getType())
                 .gender(clothingEntity.getGender())
                 .size(clothingEntity.getSize())
+                .created(clothingEntity.getCreated())
+                .updated(clothingEntity.getUpdated())
                 .build();
     }
 
