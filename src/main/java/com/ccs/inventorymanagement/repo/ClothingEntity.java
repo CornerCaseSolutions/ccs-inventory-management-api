@@ -31,7 +31,7 @@ public class ClothingEntity extends ItemEntity {
     @Column
     private Clothing.Gender gender;
 
-    @Column
+    @Column(value = "clothingSize")
     private Clothing.Size size;
 
     public static ClothingEntity from(Clothing clothing) {
