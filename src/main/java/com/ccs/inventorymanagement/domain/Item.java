@@ -29,4 +29,6 @@ public class Item implements Trackable {
     private Condition condition;
     private Status status;
     private String description;
+    private Instant created;
+    private Instant updated;
 }

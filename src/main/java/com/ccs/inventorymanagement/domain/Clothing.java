@@ -4,7 +4,6 @@ import com.ccs.inventorymanagement.repo.ClothingEntity;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
-import java.time.Instant;
 import java.util.UUID;
 
 @Data
@@ -46,7 +45,6 @@ public class Clothing extends Item {
     private Type type;
     private Gender gender;
     private Size size;
-    private Instant updated;
 
     public static Clothing from(ClothingEntity clothingEntity) {
         return Clothing.builder()
@@ -60,6 +58,7 @@ public class Clothing extends Item {
                 .type(clothingEntity.getType())
                 .gender(clothingEntity.getGender())
                 .size(clothingEntity.getSize())
+                .created(clothingEntity.getCreated())
                 .updated(clothingEntity.getUpdated())
                 .build();
     }
