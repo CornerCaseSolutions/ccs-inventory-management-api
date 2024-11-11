@@ -46,6 +46,7 @@ public class ClothingEntity extends ItemEntity {
                 .type(clothing.getType())
                 .gender(clothing.getGender())
                 .size(clothing.getSize())
+                .updated(clothing.getUpdated())
                 .build();
     }
 

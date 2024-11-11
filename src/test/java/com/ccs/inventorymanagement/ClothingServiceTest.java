@@ -5,6 +5,7 @@ import com.ccs.inventorymanagement.repo.ClothingEntity;
 import com.ccs.inventorymanagement.repo.ClothingRepository;
 import com.ccs.inventorymanagement.service.ClothingService;
 import io.r2dbc.spi.R2dbcBadGrammarException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +18,7 @@ import reactor.test.StepVerifier;
 
 import java.time.Instant;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -50,6 +52,7 @@ public class ClothingServiceTest {
         clothingService.findAll()
                 .as(StepVerifier::create)
                 .assertNext(clothing -> assertEquals(id, clothing.getId()))
+                .expectNextCount(1)
                 .verifyComplete();
         verify(clothingRepository, times(1)).findAll();
     }
@@ -90,7 +93,7 @@ public class ClothingServiceTest {
         // Then
         clothingService.findById(id)
                 .as(StepVerifier::create)
-                .verifyComplete();
+                .verifyComplete(); // makes sure reactive chain completes
         verify(clothingRepository, times(1)).findById(id);
     }
 
@@ -118,20 +121,28 @@ public class ClothingServiceTest {
         //Given
         final UUID id = UUID.randomUUID();
         Clothing clothing = mock(Clothing.class);
-        ClothingEntity entity = mock(ClothingEntity.class);
-
+//        ClothingEntity entity = mock(ClothingEntity.class); // create an actual entity
+        ClothingEntity entity = ClothingEntity.builder().build();
+        Instant initialTime = Instant.now();
+        ClothingEntity saved = ClothingEntity.builder().updated(initialTime).build();
         //When
         when(clothingRepository.findById(id))
                 .thenReturn(Mono.just(entity));
+        when(clothingRepository.save(any(ClothingEntity.class)))
+                .thenReturn(Mono.just(saved));
         when(clothing.getId())
                 .thenReturn(id);
-        when(entity.toBuilder())
-                .thenReturn(entity.toBuilder().build());
 
         //Then
         clothingService.update(clothing)
                 .as(StepVerifier::create)
+                .assertNext(new Consumer<Clothing>() {
+                    @Override
+                    public void accept(Clothing clothing) {
+                        Assertions.assertEquals(initialTime, clothing.getUpdated());
+                    }
+                })
                 .verifyComplete();
-        verify(clothingRepository, times(1)).save(entity);
+        verify(clothingRepository, times(1)).save(any(ClothingEntity.class));
     }
 }
