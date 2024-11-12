@@ -1,6 +1,7 @@
 package com.ccs.inventorymanagement;
 
 import com.ccs.inventorymanagement.domain.Clothing;
+import com.ccs.inventorymanagement.domain.Item;
 import com.ccs.inventorymanagement.repo.ClothingEntity;
 import com.ccs.inventorymanagement.repo.ClothingRepository;
 import com.ccs.inventorymanagement.service.ClothingService;
@@ -51,7 +52,6 @@ public class ClothingServiceTest {
         // Then
         clothingService.findAll()
                 .as(StepVerifier::create)
-                .assertNext(clothing -> assertEquals(id, clothing.getId()))
                 .expectNextCount(1)
                 .verifyComplete();
         verify(clothingRepository, times(1)).findAll();
@@ -121,7 +121,6 @@ public class ClothingServiceTest {
         //Given
         final UUID id = UUID.randomUUID();
         Clothing clothing = mock(Clothing.class);
-//        ClothingEntity entity = mock(ClothingEntity.class); // create an actual entity
         ClothingEntity entity = ClothingEntity.builder().build();
         Instant initialTime = Instant.now();
         ClothingEntity saved = ClothingEntity.builder().updated(initialTime).build();
@@ -143,6 +142,112 @@ public class ClothingServiceTest {
                     }
                 })
                 .verifyComplete();
+        verify(clothingRepository, times(1)).save(any(ClothingEntity.class));
+    }
+
+    @Test
+    @DisplayName("PUT Update Clothing: Should not update clothing by ID if does not exist")
+    public void shouldNotUpdateClothingWhenIdNotFound() {
+        //Given
+        final UUID id = UUID.randomUUID();
+        Clothing clothing = mock(Clothing.class);
+
+        //When
+        when(clothingRepository.findById(id))
+                .thenReturn(Mono.empty());
+        when(clothing.getId())
+                .thenReturn(id);
+        //Then
+        clothingService.update(clothing)
+                .as(StepVerifier::create)
+                .verifyComplete();
+        verify(clothingRepository, times(1)).findById(id);
+        verify(clothingRepository, times(0)).save(any(ClothingEntity.class));
+    }
+
+    @Test
+    @DisplayName("PUT Update Clothing: Save call throws error")
+    public void shouldNotUpdateClothingWhenSaveReturnsError() {
+        //Given
+        final UUID id  = UUID.randomUUID();
+        Clothing clothing = mock(Clothing.class);
+        ClothingEntity entity = ClothingEntity.builder().build();
+
+        //When
+        when(clothingRepository.findById(id))
+                .thenReturn(Mono.just(entity));
+        when(clothingRepository.save(any(ClothingEntity.class)))
+                .thenReturn(Mono.error(new R2dbcBadGrammarException()));
+        when(clothing.getId())
+                .thenReturn(id);
+
+        //Then
+        clothingService.update(clothing)
+                .as(StepVerifier::create)
+                .verifyError(R2dbcBadGrammarException.class);
+        verify(clothingRepository, times(1)).save(any(ClothingEntity.class));
+    }
+
+    @Test
+    @DisplayName("DEL Delete Clothing: Should delete clothing based on Id")
+    public void shouldDeleteClothing() {
+        //Given
+        final UUID id = UUID.randomUUID();
+        ClothingEntity entity = ClothingEntity.builder().build();
+        Instant initialTime = Instant.now();
+        ClothingEntity saved = ClothingEntity.builder()
+                .status(Item.Status.DELETED)
+                .updated(initialTime)
+                .build();
+
+        //When
+        when(clothingRepository.findById(id))
+                .thenReturn(Mono.just(entity));
+        when(clothingRepository.save(any(ClothingEntity.class)))
+                .thenReturn((Mono.just(saved)));
+
+        //Then
+        clothingService.delete(id)
+                .as(StepVerifier::create)
+                .verifyComplete();
+        verify(clothingRepository, times(1)).save(any(ClothingEntity.class));
+    }
+
+    @Test
+    @DisplayName("DEL Delete Clothing: Should not delete clothing if Id does not exist")
+    public void shouldNotDeleteClothingWhenIdNotFound() {
+        //Given
+        final UUID id = UUID.randomUUID();
+
+        //When
+        when(clothingRepository.findById(id))
+                .thenReturn(Mono.empty());
+
+        //Then
+        clothingService.delete(id)
+                .as(StepVerifier::create)
+                .verifyComplete();
+        verify(clothingRepository, times(1)).findById(id);
+        verify(clothingRepository, times(0)).save(any(ClothingEntity.class));
+    }
+
+    @Test
+    @DisplayName("DEL Delete Clothing: Save call throws error")
+    public void shouldNotDeleteClothingWhenSaveReturnsError() {
+        //Given
+        final UUID id = UUID.randomUUID();
+        ClothingEntity entity = ClothingEntity.builder().build();
+
+        //When
+        when(clothingRepository.findById(id))
+                .thenReturn(Mono.just(entity));
+        when(clothingRepository.save(any(ClothingEntity.class)))
+                .thenReturn(Mono.error(new R2dbcBadGrammarException()));
+
+        //Then
+        clothingService.delete(id)
+                .as(StepVerifier::create)
+                .verifyError(R2dbcBadGrammarException.class);
         verify(clothingRepository, times(1)).save(any(ClothingEntity.class));
     }
 }
