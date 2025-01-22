@@ -15,9 +15,8 @@ pipeline {
 
         stage("Run Tests") {
             steps {
-                sh "./gradlew test" //runs tests separately even though gradlew build will also run them 
+                sh "./gradlew test" //runs tests separately even though gradlew build will also run them
             }
         }
-
     }
 }
