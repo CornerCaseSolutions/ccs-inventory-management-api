@@ -4,6 +4,8 @@ import com.ccs.inventorymanagement.repo.ClothingEntity;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
+import java.util.UUID;
+
 @Data
 @SuperBuilder
 public class Clothing extends Item {

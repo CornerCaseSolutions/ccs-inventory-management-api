@@ -157,3 +157,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# Stuff Jacob added
+.gradle/
+build/

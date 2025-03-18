@@ -9,7 +9,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.UUID;
 
@@ -18,7 +17,6 @@ import java.util.UUID;
 @SuperBuilder(toBuilder = true)
 @Getter
 @Setter
-@Table("clothing")
 public class ClothingEntity extends ItemEntity {
 
     @Column
@@ -48,7 +46,6 @@ public class ClothingEntity extends ItemEntity {
                 .type(clothing.getType())
                 .gender(clothing.getGender())
                 .size(clothing.getSize())
-                .created(clothing.getCreated())
                 .updated(clothing.getUpdated())
                 .build();
     }
