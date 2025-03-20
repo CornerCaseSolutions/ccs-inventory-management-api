@@ -89,6 +89,6 @@ public class RouteConfig {
     @Profile("dev")
     @Bean
     public HandlerFunction<ServerResponse> generateJwtHandler(JwtService jwtService) {
-        return new GenerateJwtRoute(jwtService);
+        return new GenerateJwtHandler(jwtService);
     }
 }
