@@ -1,10 +1,12 @@
 package com.ccs.inventorymanagement.config;
 
 import com.ccs.inventorymanagement.route.*;
+import com.ccs.inventorymanagement.security.JwtService;
 import com.ccs.inventorymanagement.service.ClothingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.reactive.function.server.HandlerFunction;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -76,5 +78,17 @@ public class RouteConfig {
     @Bean
     public HandlerFunction<ServerResponse> deleteClothingHandler() {
         return new DeleteClothingHandler(clothingService);
+    }
+
+    @Bean
+    @Profile("dev")
+    public RouterFunction<ServerResponse> generateJwtRoute(JwtService jwtService) {
+        return route(GET("/jwt/generate"), generateJwtHandler(jwtService));
+    }
+
+    @Profile("dev")
+    @Bean
+    public HandlerFunction<ServerResponse> generateJwtHandler(JwtService jwtService) {
+        return new GenerateJwtHandler(jwtService);
     }
 }
