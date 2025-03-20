@@ -1,6 +1,7 @@
 package com.ccs.inventorymanagement.config;
 
 import com.ccs.inventorymanagement.route.*;
+import com.ccs.inventorymanagement.security.JwtService;
 import com.ccs.inventorymanagement.service.ClothingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -76,5 +77,15 @@ public class RouteConfig {
     @Bean
     public HandlerFunction<ServerResponse> deleteClothingHandler() {
         return new DeleteClothingHandler(clothingService);
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> generateJwtRoute(JwtService jwtService) {
+        return route(GET("/jwt/generate"), generateJwtHandler(jwtService));
+    }
+
+    @Bean
+    public HandlerFunction<ServerResponse> generateJwtHandler(JwtService jwtService) {
+        return new GenerateJwtRoute(jwtService);
     }
 }
