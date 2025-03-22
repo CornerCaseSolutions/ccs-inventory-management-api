@@ -135,12 +135,7 @@ public class ClothingServiceTest {
         //Then
         clothingService.update(clothing)
                 .as(StepVerifier::create)
-                .assertNext(new Consumer<Clothing>() {
-                    @Override
-                    public void accept(Clothing clothing) {
-                        Assertions.assertEquals(initialTime, clothing.getUpdated());
-                    }
-                })
+                .assertNext(stepClothing -> Assertions.assertEquals(initialTime, stepClothing.getUpdated()))
                 .verifyComplete();
         verify(clothingRepository, times(1)).save(any(ClothingEntity.class));
     }

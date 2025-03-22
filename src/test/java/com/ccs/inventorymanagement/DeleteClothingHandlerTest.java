@@ -68,12 +68,7 @@ public class DeleteClothingHandlerTest {
         //Then
         deleteClothingHandler.handle(serverRequest)
                 .as(StepVerifier::create)
-                .assertNext(new Consumer<ServerResponse>() {
-                    @Override
-                    public void accept(ServerResponse serverResponse) {
-                        Assertions.assertTrue(serverResponse.statusCode() == HttpStatus.INTERNAL_SERVER_ERROR);
-                    }
-                })
+                .assertNext(serverResponse -> Assertions.assertTrue(HttpStatus.INTERNAL_SERVER_ERROR == serverResponse.statusCode()))
                 .verifyComplete();
         verify(clothingService, times(1)).delete(id);
     }

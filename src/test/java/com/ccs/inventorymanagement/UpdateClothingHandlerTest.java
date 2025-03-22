@@ -76,12 +76,7 @@ public class UpdateClothingHandlerTest {
         //Then
         updateClothingHandler.handle(serverRequest)
                 .as(StepVerifier::create)
-                .assertNext(new Consumer<ServerResponse>() {
-                    @Override
-                    public void accept(ServerResponse serverResponse) {
-                        Assertions.assertTrue(serverResponse.statusCode() == HttpStatus.INTERNAL_SERVER_ERROR);
-                    }
-                })
+                .assertNext(serverResponse -> Assertions.assertTrue(HttpStatus.INTERNAL_SERVER_ERROR == serverResponse.statusCode()))
                 .verifyComplete();
         verify(clothingService, times(1)).update(any(Clothing.class));
     }
@@ -105,12 +100,7 @@ public class UpdateClothingHandlerTest {
         //Then
         updateClothingHandler.handle(serverRequest)
                 .as(StepVerifier::create)
-                .assertNext(new Consumer<ServerResponse>() {
-                    @Override
-                    public void accept(ServerResponse serverResponse) {
-                        Assertions.assertTrue(serverResponse.statusCode() == HttpStatus.NOT_FOUND);
-                    }
-                })
+                .assertNext(serverResponse -> Assertions.assertTrue(HttpStatus.NOT_FOUND == serverResponse.statusCode()))
                 .verifyComplete();
     }
 }
