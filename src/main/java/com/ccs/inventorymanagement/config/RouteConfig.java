@@ -1,12 +1,11 @@
 package com.ccs.inventorymanagement.config;
 
 import com.ccs.inventorymanagement.route.*;
-import com.ccs.inventorymanagement.security.JwtService;
+import com.ccs.inventorymanagement.security.AuthenticationService;
 import com.ccs.inventorymanagement.service.ClothingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.web.reactive.function.server.HandlerFunction;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -21,6 +20,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 public class RouteConfig {
 
     public static final String CLOTHING_PATH = "/clothing";
+    public static final String LOGIN_PATH = "/login";
     public static final String ID_VARIABLE = "id";
     public static final String CLOTHING_BY_ID_PATH = CLOTHING_PATH + "/{" + ID_VARIABLE + "}";
     private final ClothingService clothingService;
@@ -81,14 +81,12 @@ public class RouteConfig {
     }
 
     @Bean
-    @Profile("dev")
-    public RouterFunction<ServerResponse> generateJwtRoute(JwtService jwtService) {
-        return route(GET("/jwt/generate"), generateJwtHandler(jwtService));
+    public RouterFunction<ServerResponse> authenticationRoute(AuthenticationService authenticationService) {
+        return route(POST(LOGIN_PATH), authenticationHandler(authenticationService));
     }
 
-    @Profile("dev")
     @Bean
-    public HandlerFunction<ServerResponse> generateJwtHandler(JwtService jwtService) {
-        return new GenerateJwtHandler(jwtService);
+    public HandlerFunction<ServerResponse> authenticationHandler(AuthenticationService authenticationService) {
+        return new AuthenticationHandler(authenticationService);
     }
 }

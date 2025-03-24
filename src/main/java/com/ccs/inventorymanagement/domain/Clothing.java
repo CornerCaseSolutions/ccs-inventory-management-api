@@ -1,6 +1,5 @@
 package com.ccs.inventorymanagement.domain;
 
-import com.ccs.inventorymanagement.domain.user.Name;
 import com.ccs.inventorymanagement.repo.ClothingEntity;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;

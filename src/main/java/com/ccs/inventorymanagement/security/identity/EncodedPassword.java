@@ -11,11 +11,11 @@ public class EncodedPassword implements Password {
     private final boolean encoded;
 
     public static EncodedPassword plain(String password) {
-        return new EncodedPassword(password, true);
+        return new EncodedPassword(password, false);
     }
 
     public static EncodedPassword encoded(String password) {
-        return new EncodedPassword(password, false);
+        return new EncodedPassword(password, true);
     }
 
     private EncodedPassword(String value, boolean encoded) {
@@ -41,8 +41,7 @@ public class EncodedPassword implements Password {
     @Override
     public boolean verify(PasswordEncoder encoder, Password password) {
         if (!encoded) {
-            log.warn("Attempted to verify plaintext password");
-            return false;
+            password = encode(encoder);
         }
         return encoder.matches(password.getValue(), this.value);
     }
