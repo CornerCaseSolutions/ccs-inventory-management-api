@@ -12,3 +12,16 @@ create table if not exists clothing (
        created timestamp,
        updated timestamp
 );
+
+create table if not exists users (
+    id uuid primary key default gen_random_uuid(),
+    email varchar,
+    password varchar,
+    role varchar,
+    firstName varchar,
+    lastName varchar,
+    street varchar,
+    city varchar,
+    state varchar,
+    zip varchar
+);

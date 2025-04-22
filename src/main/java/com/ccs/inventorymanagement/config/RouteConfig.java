@@ -1,6 +1,7 @@
 package com.ccs.inventorymanagement.config;
 
 import com.ccs.inventorymanagement.route.*;
+import com.ccs.inventorymanagement.security.AuthenticationService;
 import com.ccs.inventorymanagement.service.ClothingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 public class RouteConfig {
 
     public static final String CLOTHING_PATH = "/clothing";
+    public static final String LOGIN_PATH = "/login";
     public static final String ID_VARIABLE = "id";
     public static final String CLOTHING_BY_ID_PATH = CLOTHING_PATH + "/{" + ID_VARIABLE + "}";
     private final ClothingService clothingService;
@@ -76,5 +78,15 @@ public class RouteConfig {
     @Bean
     public HandlerFunction<ServerResponse> deleteClothingHandler() {
         return new DeleteClothingHandler(clothingService);
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> authenticationRoute(AuthenticationService authenticationService) {
+        return route(POST(LOGIN_PATH), authenticationHandler(authenticationService));
+    }
+
+    @Bean
+    public HandlerFunction<ServerResponse> authenticationHandler(AuthenticationService authenticationService) {
+        return new AuthenticationHandler(authenticationService);
     }
 }
